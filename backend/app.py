@@ -5,7 +5,7 @@ from flask_cors import CORS
 from flask_session import Session
 import os
 from models import db
-from routes import auth_bp, admin_bp  
+from routes import auth_bp, admin_bp , service_bp 
 
 app = Flask(__name__)
 
@@ -22,7 +22,8 @@ app.config['SESSION_FILE_DIR'] = os.path.join(os.getcwd(), 'flask_session')
 os.makedirs(app.config['SESSION_FILE_DIR'], exist_ok=True)
 
 # ✅ CORS Configuration
-CORS(app, resources={r"/*": {"origins": "http://localhost:8082"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "http://localhost:8081"}}, supports_credentials=True)
+
 
 # ✅ Allow Cookies in Response
 app.config['SESSION_COOKIE_HTTPONLY'] = True  
@@ -37,6 +38,8 @@ Session(app)
 # Register Blueprints
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
+app.register_blueprint(service_bp, url_prefix='/service') 
+#app.register_blueprint(booking_bp, url_prefix="/booking")
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5000, debug=True)
